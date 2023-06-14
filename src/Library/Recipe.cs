@@ -24,12 +24,15 @@ namespace Full_GRASP_And_SOLID
         // debe pasar la propiedad Cooked a true cuando pase el tiempo indicado por GetCookTime()
         public void Cook()
         {
-            if(Cooked){
+            if(!Cooked){
                 int cookTime = GetCookTime();
                 CountdownTimer cookTimer = new CountdownTimer();
-                cookTimer.Register(cookTimer, new TimerClient());
-                this.Cooked = true;
+                cookTimer.Register(cookTime, new timerClient(this));
             }
+        }
+        public void SetCooked()
+        {
+            Cooked = true;
         }
 
         // Agregado por Creator
@@ -83,8 +86,12 @@ namespace Full_GRASP_And_SOLID
         // Expert
         public int GetCookTime(){
             int result = 0;
-            foreach (WaitStep step in this.steps){
-                result = result + (int)step.GetStepCost();
+            foreach (BaseStep step in this.steps){
+                if (step is WaitStep)
+                {
+                    result = result + (int)step.GetStepCost();    
+                }
+                
             }
             return result;
         }
